@@ -11,10 +11,20 @@ import { Audio } from "../types";
 import onAudioClick from "../utils/onAudioClick";
 import getBaseURL from "../utils/getBaseURL";
 import classNames from "../utils/classNames";
+import { useState } from "react";
 
-const Home: NextPage = () => {
+interface IHomeProps {
+  playingNowAudio?: Audio;
+}
+
+const Home: NextPage<IHomeProps> = (props) => {
+  const { playingNowAudio } = props;
   const { audios, setPlayingNow, playingNow, ref, isPlaying, setIsPlaying } =
     useAudio();
+
+  const [title, setTitle] = useState(
+    playingNowAudio ? playingNowAudio.title : "NvMusic with Next.js"
+  );
 
   const onClick = async (audio: Audio) => {
     if (playingNow === audio.slug) {
@@ -36,7 +46,10 @@ const Home: NextPage = () => {
 
     try {
       setIsPlaying(true);
-      await onAudioClick(audio, () => setPlayingNow(audio.slug));
+      await onAudioClick(audio, () => {
+        setPlayingNow(audio.slug);
+        setTitle(audio.title);
+      });
     } catch (error: any) {
       console.info(error.message);
     }
@@ -45,7 +58,7 @@ const Home: NextPage = () => {
   return (
     <div className="mx-auto my-auto flex items-center justify-center h-screen flex-col space-y-5">
       <Head>
-        <title>NvMusic with Next.js</title>
+        <title>{title}</title>
         <meta name="description" content="NvMusic built with Next.js" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Fragment>
       {playingNow && <audio src={playingNow.src} ref={ref} autoPlay loop />}
-      <Component {...pageProps} />
+      <Component {...pageProps} playingNowAudio={playingNow} />
     </Fragment>
   );
 }
