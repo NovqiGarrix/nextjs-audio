@@ -13,13 +13,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     return audio;
   }, [_playingNow, audios]);
 
-  useEffect(() => {
-    console.log(ref.current);
-    if (ref.current) {
-      ref.current.play();
-    }
-  }, [playingNow, ref]);
-
   return (
     <Fragment>
       {playingNow && <audio src={playingNow.src} ref={ref} autoPlay loop />}

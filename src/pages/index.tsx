@@ -11,7 +11,25 @@ import onAudioClick from "../utils/onAudioClick";
 import getBaseURL from "../utils/getBaseURL";
 
 const Home: NextPage = () => {
-  const { audios, setPlayingNow } = useAudio();
+  const { audios, setPlayingNow, playingNow, ref } = useAudio();
+
+  const onClick = async (audio: Audio) => {
+    if (playingNow === audio.slug) {
+      if (!ref.current) {
+        console.log("Ref does not initialize yet!");
+        return;
+      }
+
+      if (ref.current.paused) {
+        await ref.current.play();
+        return;
+      }
+
+      ref.current.pause();
+      return;
+    }
+    await onAudioClick(audio, () => setPlayingNow(audio.slug));
+  };
 
   return (
     <div className="mx-auto my-auto flex items-center justify-center h-screen flex-col space-y-5">
@@ -29,10 +47,8 @@ const Home: NextPage = () => {
             <button
               type="button"
               key={audio.slug}
-              onClick={() =>
-                onAudioClick(audio, () => setPlayingNow(audio.slug))
-              }
-              className="py-3 px-4 rounded-lg group w-full text-center even:bg-gray-100 odd:bg-transparent hover:bg-green-500 transition-all duration-150 flex items-center"
+              onClick={() => onClick(audio)}
+              className="py-3 px-4 rounded-lg group w-full text-center even:bg-gray-100 odd:bg-transparent hover:bg-green-500 flex items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600"
             >
               <PlayIcon className="w-5 h-5 text-gray-500 group-hover:text-white mr-3 transition-all duration-150" />
               <span className="text-gray-500 group-hover:text-white transition-all duration-150">
@@ -51,8 +67,9 @@ const Home: NextPage = () => {
 };
 
 export default Home;
-
 export async function getServerSideProps() {
+  console.time("Serverless Time");
+
   const audios: Array<Audio> = [
     {
       duration: 2 * 60,
@@ -75,6 +92,8 @@ export async function getServerSideProps() {
   const {
     data: { data: playingNow },
   } = await axios.get(`${BASE_URL}/api/redis?key=playingNow`);
+
+  console.timeEnd("Serverless Time");
 
   return {
     props: {

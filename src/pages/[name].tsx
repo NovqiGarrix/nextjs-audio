@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 import { Audio } from "../types";
+import getBaseURL from "../utils/getBaseURL";
 
 const DetailName: NextPage = () => {
   const router = useRouter();
@@ -36,9 +37,11 @@ export async function getServerSideProps() {
     },
   ];
 
+  const BASE_URL = getBaseURL();
+
   const {
     data: { data: playingNow },
-  } = await axios.get(`/api/redis?key=playingNow`);
+  } = await axios.get(`${BASE_URL}/api/redis?key=playingNow`);
 
   return {
     props: {
