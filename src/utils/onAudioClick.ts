@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import { Audio } from "../types";
 import getBaseURL from "./getBaseURL";
 
@@ -5,15 +7,7 @@ export default async function onAudioClick(audio: Audio, callback: () => void) {
     const BASE_URL = getBaseURL();
 
     try {
-        const resp = await fetch(`${BASE_URL}/api/redis`, {
-            method: "POST",
-            body: JSON.stringify({ key: "playingNow", value: audio.slug }),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-
-        const { data, msg } = await resp.json();
+        const { data: { data, msg } } = await axios.post(`${BASE_URL}/api/redis`, { key: "playingNow", value: audio.slug });
         if (data === "OK") {
             callback();
             return;

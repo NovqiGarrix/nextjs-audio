@@ -1,5 +1,7 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import axios from "axios";
+
 import { Audio } from "../types";
 
 const DetailName: NextPage = () => {
@@ -23,12 +25,20 @@ export async function getServerSideProps() {
       singer: "ILLENIUM",
       slug: "fortress",
       title: "Fortress by ILLENIUM",
-      src: "/fortress.mp3",
+      src: "/musics/fortress.mp3",
+    },
+    {
+      duration: 2 * 60,
+      singer: "Marsmello",
+      slug: "singMeToSleep",
+      title: "Sing Me to Sleep by Marsmello",
+      src: "/musics/singMeToSleep.mp3",
     },
   ];
 
-  const resp = await fetch("/api/redis?key=playingNow");
-  const { data: playingNow } = await resp.json();
+  const {
+    data: { data: playingNow },
+  } = await axios.get(`/api/redis?key=playingNow`);
 
   return {
     props: {

@@ -2,12 +2,13 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 
+import axios from "axios";
 import { PlayIcon } from "@heroicons/react/24/outline";
 
 import { useAudio } from "../contexts/AudioContext";
 import { Audio } from "../types";
-import getBaseURL from "../utils/getBaseURL";
 import onAudioClick from "../utils/onAudioClick";
+import getBaseURL from "../utils/getBaseURL";
 
 const Home: NextPage = () => {
   const { audios, setPlayingNow } = useAudio();
@@ -52,8 +53,6 @@ const Home: NextPage = () => {
 export default Home;
 
 export async function getServerSideProps() {
-  const BASE_URL = getBaseURL();
-
   const audios: Array<Audio> = [
     {
       duration: 2 * 60,
@@ -71,8 +70,11 @@ export async function getServerSideProps() {
     },
   ];
 
-  const resp = await fetch(`${BASE_URL}/api/redis?key=playingNow`);
-  const { data: playingNow } = await resp.json();
+  const BASE_URL = getBaseURL();
+
+  const {
+    data: { data: playingNow },
+  } = await axios.get(`${BASE_URL}/api/redis?key=playingNow`);
 
   return {
     props: {
