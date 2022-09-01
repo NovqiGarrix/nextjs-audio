@@ -1,6 +1,8 @@
 import "../styles/globals.css";
+
 import type { AppProps } from "next/app";
-import { Fragment, useEffect, useMemo } from "react";
+import { Fragment, useMemo } from "react";
+
 import { AudioContextProvider, useAudio } from "../contexts/AudioContext";
 
 function MyApp({ Component, pageProps }: AppProps) {

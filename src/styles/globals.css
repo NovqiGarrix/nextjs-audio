@@ -7,3 +7,7 @@
 .merah {
   border: 1px solid red;
 }
+
+body {
+  font-family: "Poppins", sans-serif;
+}

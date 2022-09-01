@@ -4,12 +4,17 @@ import axios from "axios";
 
 import { Audio } from "../types";
 import getBaseURL from "../utils/getBaseURL";
+import Head from "next/head";
 
 const DetailName: NextPage = () => {
   const router = useRouter();
 
   return (
     <main className="flex items-center h-screen w-full justify-center">
+      <Head>
+        <title>{"Hello, " + router?.query?.name}</title>
+      </Head>
+
       <h1 className="text-5xl text-orange-600 font-semibold font-poppins">
         Hello, {router.query?.name}
       </h1>

@@ -20,6 +20,9 @@ export interface IAudioContenxtProps {
   setPlayingNow: Dispatch<SetStateAction<string | undefined>>;
 
   ref: RefObject<HTMLAudioElement>;
+
+  isPlaying: boolean;
+  setIsPlaying: Dispatch<SetStateAction<boolean>>;
 }
 
 export const AudioContext = createContext<IAudioContenxtProps | null>(
@@ -39,6 +42,7 @@ export const AudioContextProvider: FunctionComponent<
 
   const [audios, setAudios] = useState(_audios);
   const [playingNow, setPlayingNow] = useState(_playingNow);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const ref = useRef<HTMLAudioElement>(null);
 
@@ -50,6 +54,9 @@ export const AudioContextProvider: FunctionComponent<
     setPlayingNow,
 
     ref,
+
+    isPlaying,
+    setIsPlaying,
   };
 
   return (
